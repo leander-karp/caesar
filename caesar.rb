@@ -1,7 +1,7 @@
 require 'pry'
 
-SMALL_CHAR_ALPHABET = "a".ord...(1+"z".ord)
-BIG_CHAR_ALPHABET = "A".ord...(1+"Z".ord)
+SMALL_CHAR_ALPHABET = "a".ord.."z".ord
+BIG_CHAR_ALPHABET = "A".ord.."Z".ord
 
 def primitive_caesar_cipher(secret_text, shift)
   ##
@@ -20,8 +20,8 @@ def alphabet_only_caesar_cipher(secret_text, shift)
   # shift (Integer): Use a positive integer to encrypt and a negative one to decrypt
 
   secret_text = secret_text.encode(Encoding::UTF_8).split("")
-  if shift < 0 && shift < -26
-    shift = -(-shift%26) + 26
+  if shift < -26
+    shift = shift.remainder(26) + 26
   elsif shift > -26 && shift < 0
     shift += 26
   end 
@@ -35,7 +35,7 @@ def alphabet_only_caesar_cipher(secret_text, shift)
       alphabet = BIG_CHAR_ALPHABET.include?(char.ord)? BIG_CHAR_ALPHABET : SMALL_CHAR_ALPHABET
       if shifted_char_ord < alphabet.first
         shifted_char_ord += 26 
-      elsif shifted_char_ord > alphabet.last-1
+      elsif shifted_char_ord > alphabet.last
         shifted_char_ord -= 26 
       end
       shifted_char_ord.chr(Encoding::UTF_8)
