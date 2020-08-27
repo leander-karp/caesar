@@ -2,7 +2,6 @@ require 'pry'
 
 SMALL_CHAR_ALPHABET = "a".ord...(1+"z".ord)
 BIG_CHAR_ALPHABET = "A".ord...(1+"Z".ord)
-puts BIG_CHAR_ALPHABET.size 
 
 def primitive_caesar_cipher(secret_text, shift)
   ##
@@ -23,8 +22,7 @@ def alphabet_only_caesar_cipher(secret_text, shift)
   secret_text = secret_text.encode(Encoding::UTF_8).split("")
   if shift < 0 && shift < -26
     shift = -(-shift%26) + 26
-  end
-  if shift > -26 && shift < 0
+  elsif shift > -26 && shift < 0
     shift += 26
   end 
   if shift > 26
@@ -33,27 +31,17 @@ def alphabet_only_caesar_cipher(secret_text, shift)
 
   secret_text.map! do |char|
     shifted_char_ord = char.ord + shift
-    # new_shift = shift < 0? -1*shift : shift
-    # shifted_char_ord = new_shift<26? char.ord + new_shift : char.ord + new_shift%26
-    # shifted_char_ord = shift < 0 && new_shift >= 26? shifted_char_ord * -1 : shifted_char_ord
-    # TODO %26 für negative Zahlen
-    if BIG_CHAR_ALPHABET.include?(char.ord)
-      if shifted_char_ord < BIG_CHAR_ALPHABET.first
+    if BIG_CHAR_ALPHABET.include?(char.ord) || SMALL_CHAR_ALPHABET.include?(char.ord)
+      alphabet = BIG_CHAR_ALPHABET.include?(char.ord)? BIG_CHAR_ALPHABET : SMALL_CHAR_ALPHABET
+      if shifted_char_ord < alphabet.first
         shifted_char_ord += 26 
-      elsif shifted_char_ord > BIG_CHAR_ALPHABET.last-1
-        shifted_char_ord -= 26 
-      end
-      shifted_char_ord.chr(Encoding::UTF_8)
-    elsif SMALL_CHAR_ALPHABET.include?(char.ord) 
-      if shifted_char_ord < SMALL_CHAR_ALPHABET.first
-        shifted_char_ord += 26 
-      elsif shifted_char_ord > SMALL_CHAR_ALPHABET.last-1
+      elsif shifted_char_ord > alphabet.last-1
         shifted_char_ord -= 26 
       end
       shifted_char_ord.chr(Encoding::UTF_8)
     else 
-      char
-    end  
+      char 
+    end 
   end
   return secret_text.join("")
 end 
@@ -74,4 +62,4 @@ def test
 end
 
 test
-# puts alphabet_only_caesar_cipher("What a string!", 5)
+puts alphabet_only_caesar_cipher("What a string!", 5) # Bmfy f xywnsl!
